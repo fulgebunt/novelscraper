@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Read Chapters</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body>
+    <a href="{{ url_for('home') }}">Return to Home</a>
+    <div>
+        {% if prev_chapter is not none %}
+            <a href="{{ url_for('read', json_filename=json_filename, chapter_num=prev_chapter) }}">Previous Chapter</a>
+        {% endif %}
+        {% if next_chapter is not none %}
+            <a href="{{ url_for('read', json_filename=json_filename, chapter_num=next_chapter) }}">Next Chapter</a>
+        {% endif %}
+        {% if show_download_button %}
+            <a href="{{ url_for('download_chapters', json_filename=json_filename, current_chapter=current_chapter) }}" class="download-button">Download More</a>
+        {% endif %}
+    </div>
+
+    <div>
+        {{ text|safe }}
+    </div>
+
+    <div>
+        {% if prev_chapter is not none %}
+            <a href="{{ url_for('read', json_filename=json_filename, chapter_num=prev_chapter) }}">Previous Chapter</a>
+        {% endif %}
+        {% if next_chapter is not none %}
+            <a href="{{ url_for('read', json_filename=json_filename, chapter_num=next_chapter) }}">Next Chapter</a>
+        {% endif %}
+    </div>
+</body>
+</html>

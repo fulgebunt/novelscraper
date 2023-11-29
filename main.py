@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import time
 import json
+from retrievelink import get_novels
 
 def scrape_website_text(url, delay=5, max_retries=5):
     retries = 0
@@ -32,27 +33,75 @@ def scrape_website_text(url, delay=5, max_retries=5):
 
 
 # Example usage
-chapters = {}
-for i in range(500):
-    number = i+1
-    url = "https://wuxia.click/chapter/library-of-heavens-path-" + str(number)  # Replace with the desired URL
-    webpage_text = scrape_website_text(url)
-    chapter = "Chapter " + str(number)
-    if chapter in webpage_text["body "]:
-        chapters[chapter] = webpage_text["body "][webpage_text["body "].index(chapter):-1]
-    else:
-        chapters[chapter] = webpage_text["body "]
-    if (i+1) % 10 == 0:
-        print(i)
-        webpage = "webpage"+str(i)+".json"
-        print(webpage)
-        with open(webpage, 'w') as json_file:
-            json.dump(chapters, json_file, indent=4)
+
+def reformat_url(base_novel_url):
+    # Replace 'novel' with 'chapter' and append a hyphen at the end
+    return base_novel_url.replace('/novel/', '/chapter/') + "-"
+
+def download_basic():
+
+    novel = get_novels()
+    # Example usage
+    for i in range(1,len(novel)):
+        base_novel_url = novel[i]
+        new_url = reformat_url(base_novel_url)
+
+        print("NOVEL: " + str(i))
         chapters = {}
+        for j in range(50):
+            print("CHAPTER: " + str(j))
+            number = j+1
+            url = new_url + str(number)  # Replace with the desired URL
+            webpage_text = scrape_website_text(url)
+            chapter = "Chapter " + str(number)
+            if chapter in webpage_text["body "]:
+                chapters[chapter] = webpage_text["body "][webpage_text["body "].index(chapter):-1]
+            else:
+                chapters[chapter] = webpage_text["body "]
+
+    # Write to a JSON file
+        url = base_novel_url
+
+        # Split the URL by '/'
+        parts = url.split('/')
+
+        # Get the last part of the URL
+        last_part = parts[-1]
+        with open("static/"+last_part+'.json', 'w') as json_file:
+            json.dump(chapters, json_file, indent=4)
 
 
-# Write to a JSON file
-with open('webpage.json', 'w') as json_file:
-    json.dump(chapters, json_file, indent=4)
+def download_more(name):
+    chapters = {}
 
-url = "https://novelfulll.com/book/2568/1152941.html?c=Swindler-"  # Replace with the desired URL
+    filename = name  # Replace this with your actual filename string
+
+    # Extract the name part from the filename
+    name = filename.rsplit('.', 1)[0]
+
+    base_novel_url='https://wuxia.click/novel/' + name
+    url = base_novel_url
+
+    # Split the URL by '/'
+    parts = url.split('/')
+
+    # Get the last part of the URL
+    last_part = parts[-1]
+    new_url = reformat_url(base_novel_url)
+
+    with open("static/" + last_part + '.json', 'r') as json_file:
+        chapters = json.load(json_file)
+
+    for j in range(len(chapters),len(chapters)+50):
+        print("CHAPTER: " + str(j))
+        number = j + 1
+        url = new_url + str(number)  # Replace with the desired URL
+        webpage_text = scrape_website_text(url)
+        chapter = "Chapter " + str(number)
+        if chapter in webpage_text["body "]:
+            chapters[chapter] = webpage_text["body "][webpage_text["body "].index(chapter):-1]
+        else:
+            chapters[chapter] = webpage_text["body "]
+
+    with open("static/" + last_part + '.json', 'w') as json_file:
+        json.dump(chapters, json_file, indent=4)

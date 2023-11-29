@@ -23,6 +23,9 @@
         {% if next_chapter is not none %}
             <a href="{{ url_for('chapter', chapter_num=next_chapter) }}">Next Chapter</a>
         {% endif %}
+        {% if show_download_button %}
+    <a href="{{ url_for('download_chapters', json_filename=json_filename, current_chapter=current_chapter) }}" class="download-button">Download More</a>
+{% endif %}
     </div>
     <div>
         {{ text|safe }}
@@ -34,6 +37,7 @@
         {% if next_chapter is not none %}
             <a href="{{ url_for('chapter', chapter_num=next_chapter) }}">Next Chapter</a>
         {% endif %}
+
     </div>
 </body>
 </html>

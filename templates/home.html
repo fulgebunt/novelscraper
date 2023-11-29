@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body>
+    <h1>Pick a Novel</h1>
+    <ul>
+        {% for file in files %}
+            <!-- The file variable now contains filenames without the .json extension -->
+            <li><a href="{{ url_for('read', json_filename=file+'.json') }}">{{ file }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

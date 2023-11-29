@@ -1,0 +1,17 @@
+body {
+    background-color: black;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+a, a:visited {
+    color: lightblue; /* Light green color for links */
+}
+
+a:hover {
+    color: lightblue; /* Lighter green color for links when hovered */
+}
+
+/* Add additional CSS styles as needed */
