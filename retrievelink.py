@@ -27,7 +27,7 @@ def get_novels():
     link_pattern = re.compile(r'https://wuxia.click/novel/.*')
     key_counter = 1
 
-    for i in range(1, 2):
+    for i in range(1, 10):
         website_url = f"https://wuxia.click/search?page={i}&order_by=-total_views"
         page_links = get_all_links(website_url, link_pattern)
 

@@ -48,7 +48,7 @@ def download_basic():
 
         print("NOVEL: " + str(i))
         chapters = {}
-        for j in range(50):
+        for j in range(100):
             print("CHAPTER: " + str(j))
             number = j+1
             url = new_url + str(number)  # Replace with the desired URL
@@ -105,3 +105,6 @@ def download_more(name):
 
     with open("static/" + last_part + '.json', 'w') as json_file:
         json.dump(chapters, json_file, indent=4)
+
+if __name__ == "__main__":
+    download_basic()
