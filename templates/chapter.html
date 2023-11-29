@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chapter Viewer</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        a {
+            color: gray; /* Light green color for links */
+        }
+    </style>
+</head>
+<body>
+    <div>
+        {% if prev_chapter is not none %}
+            <a href="{{ url_for('chapter', chapter_num=prev_chapter) }}">Previous Chapter</a>
+        {% endif %}
+        {% if next_chapter is not none %}
+            <a href="{{ url_for('chapter', chapter_num=next_chapter) }}">Next Chapter</a>
+        {% endif %}
+    </div>
+    <div>
+        {{ text|safe }}
+    </div>
+    <div>
+        {% if prev_chapter is not none %}
+            <a href="{{ url_for('chapter', chapter_num=prev_chapter) }}">Previous Chapter</a>
+        {% endif %}
+        {% if next_chapter is not none %}
+            <a href="{{ url_for('chapter', chapter_num=next_chapter) }}">Next Chapter</a>
+        {% endif %}
+    </div>
+</body>
+</html>
