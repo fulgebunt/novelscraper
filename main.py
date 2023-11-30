@@ -1,3 +1,5 @@
+import os
+
 import requests
 from bs4 import BeautifulSoup
 import time
@@ -39,27 +41,12 @@ def reformat_url(base_novel_url):
     return base_novel_url.replace('/novel/', '/chapter/') + "-"
 
 def download_basic():
-
-    novel = get_novels()
+    with open('novellist.json', 'r') as json_file:
+        novel = json.load(json_file)
     # Example usage
     for i in range(1,len(novel)):
-        base_novel_url = novel[i]
+        base_novel_url = novel[str(i)]
         new_url = reformat_url(base_novel_url)
-
-        print("NOVEL: " + str(i))
-        chapters = {}
-        for j in range(100):
-            print("CHAPTER: " + str(j))
-            number = j+1
-            url = new_url + str(number)  # Replace with the desired URL
-            webpage_text = scrape_website_text(url)
-            chapter = "Chapter " + str(number)
-            if chapter in webpage_text["body "]:
-                chapters[chapter] = webpage_text["body "][webpage_text["body "].index(chapter):-1]
-            else:
-                chapters[chapter] = webpage_text["body "]
-
-    # Write to a JSON file
         url = base_novel_url
 
         # Split the URL by '/'
@@ -67,8 +54,33 @@ def download_basic():
 
         # Get the last part of the URL
         last_part = parts[-1]
-        with open("static/"+last_part+'.json', 'w') as json_file:
-            json.dump(chapters, json_file, indent=4)
+        print("NOVEL: " + str(i))
+        if os.path.isfile("static/" + last_part + '.json'):
+            print("EXISTS")
+            pass
+        else:
+            chapters = {}
+            for j in range(100):
+                print("CHAPTER: " + str(j))
+                number = j+1
+                url = new_url + str(number)  # Replace with the desired URL
+                webpage_text = scrape_website_text(url)
+                chapter = "Chapter " + str(number)
+                if chapter in webpage_text["body "]:
+                    chapters[chapter] = webpage_text["body "][webpage_text["body "].index(chapter):-1]
+                else:
+                    chapters[chapter] = webpage_text["body "]
+
+        # Write to a JSON file
+            url = base_novel_url
+
+            # Split the URL by '/'
+            parts = url.split('/')
+
+            # Get the last part of the URL
+            last_part = parts[-1]
+            with open("static/"+last_part+'.json', 'w') as json_file:
+                json.dump(chapters, json_file, indent=4)
 
 
 def download_more(name):

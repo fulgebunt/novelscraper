@@ -1,3 +1,5 @@
+import json
+
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -21,13 +23,13 @@ def get_all_links(url, pattern):
 
     return links_dict
 
-def get_novels():
+def get_novels(a,b):
 # Main script
     novels = {}
     link_pattern = re.compile(r'https://wuxia.click/novel/.*')
     key_counter = 1
 
-    for i in range(1, 10):
+    for i in range(a, b):
         website_url = f"https://wuxia.click/search?page={i}&order_by=-total_views"
         page_links = get_all_links(website_url, link_pattern)
 
@@ -39,4 +41,10 @@ def get_novels():
     print(novels)
 
     # Print the results
-    return novels
+
+
+    with open('novellist.json', 'w') as json_file:
+        json.dump(novels, json_file, indent=4)
+
+if __name__ == "__main__":
+    get_novels(21,30)
